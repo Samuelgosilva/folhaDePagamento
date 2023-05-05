@@ -228,17 +228,17 @@ namespace FolhaPagamento
             ConnectDatabase db = new ConnectDatabase();
             MySqlCommand comm = db.connect().CreateCommand();
 
-            comm.CommandText = "SELECT COUNT(*) FROM tbfuncionario WHERE cpf = @cpf";
-            comm.Parameters.AddWithValue("@cpf", f.cpf_funcionario);
-            int count = Convert.ToInt32(comm.ExecuteScalar());
-            if (count > 0)
-            {
-                // CPF already exists, do not allow insertion
-                throw new Exception("CPF já cadastrado.");
-            }
+            //comm.CommandText = "SELECT COUNT(*) FROM tbfuncionario WHERE cpf = @cpf";
+            //comm.Parameters.AddWithValue("@cpf", f.cpf_funcionario);
+            //int count = Convert.ToInt32(comm.ExecuteScalar());
+            //if (count > 0)
+            //{
+            //    // CPF already exists, do not allow insertion
+            //    throw new Exception("CPF já cadastrado.");
+            //}
 
-            comm.CommandText = "INSERT INTO tbfuncionario(cpf, nome, dataNasc, estadoCivil, login, senha, cargo) VALUES(@cpf, @nome, @dataNasc, @estadoCivil, @login, @senha, @cargo); SELECT LAST_INSERT_ID();";
-            comm.Parameters.Clear();
+            comm.CommandText = "INSERT INTO tbfuncionario(cpf, nome, dataNasc, estadoCivil, login, senha, cargo) VALUES(@cpf, @nome, @dataNasc, @estadoCivil, @login, @senha, @cargo);";
+            //comm.Parameters.Clear();
             comm.Parameters.AddWithValue("@cpf", f.cpf_funcionario);
             comm.Parameters.AddWithValue("@nome", f.nome_funcionario);
             comm.Parameters.AddWithValue("@dataNasc", f.dt_nasc_funcionario);
@@ -246,27 +246,27 @@ namespace FolhaPagamento
             comm.Parameters.AddWithValue("@login", f.login);
             comm.Parameters.AddWithValue("@senha", f.senha);
             comm.Parameters.AddWithValue("@cargo", f.cargo);
-
-            int id = Convert.ToInt32(comm.ExecuteScalar());
-
-            comm.CommandText = "INSERT INTO tbsalario(idFunc, salarioBase) VALUES(@idFunc, @salarioBase)";
-            comm.Parameters.AddWithValue("@idFunc", id);
-            comm.Parameters.AddWithValue("@salarioBase", f.salario_base);
-
-            comm.CommandText = "INSERT INTO tbendereco(idFunc, bairro, rua, cep) VALUES(@idFunc2, @bairro, @rua, @cep)";
-            comm.Parameters.AddWithValue("@idFunc2", id);
-            comm.Parameters.AddWithValue("@bairro", f.bairro_funcionario);
-            comm.Parameters.AddWithValue("@rua", f.rua_funcionario);
-            comm.Parameters.AddWithValue("@cep", f.cep_funcionario);
-
-            comm.CommandText = "INSERT INTO tbtelefonefuncionario(idFunc, ddd, telefone, tipo) VALUES(@idFunc3, @ddd, @telefone, @tipo)";
-            comm.Parameters.AddWithValue("@idFunc3", id);
-            comm.Parameters.AddWithValue("@ddd", f.ddd_funcionario);
-            comm.Parameters.AddWithValue("@telefone", f.telefone_funcionario);
-            comm.Parameters.AddWithValue("@tipo", f.tipo);
+            comm.ExecuteNonQuery();
+            //int id = Convert.ToInt32(comm.ExecuteScalar());
 
 
 
+            //comm.CommandText = "INSERT INTO tbendereco(idFunc, bairro, rua, cep) VALUES(@idFunc2, @bairro, @rua, @cep)";
+            //comm.Parameters.AddWithValue("@idFunc2", id);
+            //comm.Parameters.AddWithValue("@bairro", f.bairro_funcionario);
+            //comm.Parameters.AddWithValue("@rua", f.rua_funcionario);
+            //comm.Parameters.AddWithValue("@cep", f.cep_funcionario);
+
+            //comm.CommandText = "INSERT INTO tbtelefonefuncionario(idFunc, ddd, telefone, tipo) VALUES(@idFunc3, @ddd, @telefone, @tipo)";
+            //comm.Parameters.AddWithValue("@idFunc3", id);
+            //comm.Parameters.AddWithValue("@ddd", f.ddd_funcionario);
+            //comm.Parameters.AddWithValue("@telefone", f.telefone_funcionario);
+            //comm.Parameters.AddWithValue("@tipo", f.tipo);
+
+
+            insertSalario();
+            insertEndereco();
+            insertTelefone();
 
             limparcampos();
 
@@ -277,6 +277,56 @@ namespace FolhaPagamento
             lbox_funcionarios.Enabled = true;
 
         }
+        private int queryDatabase()
+        {
+            ConnectDatabase db = new ConnectDatabase();
+            MySqlConnection conn = db.connect();
+            MySqlCommand comm = conn.CreateCommand();
+            comm.CommandText = "SELECT * FROM tbfuncionario where cpf = @cpf";
+            comm.Parameters.AddWithValue("@cpf", txt_cpf_funcionario.Text);
+            MySqlDataReader reader = comm.ExecuteReader();
+            int id = -1;
+            while (reader.Read())
+            {
+                id = int.Parse(reader["idFunc"].ToString());
+            }
+            MessageBox.Show("id ==> ", id.ToString());
+            return id;
+
+        }
+
+        private void insertSalario()
+        {
+            ConnectDatabase db = new ConnectDatabase();
+            MySqlCommand comm = db.connect().CreateCommand();
+            comm.CommandText = "INSERT INTO tbsalario(idFunc, salarioBase) VALUES(@idFunc, @salarioBase);";
+            comm.Parameters.AddWithValue("@idFunc", queryDatabase());
+            comm.Parameters.AddWithValue("@salarioBase", txt_salario_funcionario.Text);
+
+            comm.ExecuteNonQuery();
+        }
+        private void insertEndereco()
+        {
+            ConnectDatabase db = new ConnectDatabase();
+            MySqlCommand comm = db.connect().CreateCommand();
+            comm.CommandText = "INSERT INTO tbendereco(idFunc, bairro, rua, cep) VALUES(@idFunc, @bairro, @rua, @cep);";
+            comm.Parameters.AddWithValue("@idFunc", queryDatabase());
+            comm.Parameters.AddWithValue("@bairro", txt_bairro_funcionario.Text);
+            comm.Parameters.AddWithValue("@rua", txt_rua_funcionario.Text);
+            comm.Parameters.AddWithValue("@cep", txt_cep_funcionario.Text);
+            comm.ExecuteNonQuery();
+        }
+        private void insertTelefone()
+        {
+            ConnectDatabase db = new ConnectDatabase();
+            MySqlCommand comm = db.connect().CreateCommand();
+            comm.CommandText = "INSERT INTO tbtelefonefuncionario(idFunc, ddd, telefone) VALUES(@idFunc, @ddd, @telefone);";
+            comm.Parameters.AddWithValue("@idFunc", queryDatabase());
+            comm.Parameters.AddWithValue("@ddd", txt_ddd_funcionario.Text);
+            comm.Parameters.AddWithValue("@telefone", txt_telefone_funcionario.Text);
+            comm.ExecuteNonQuery();
+        }
+
         private void btn_cancelar_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Se cancelado sera perdida toda informção preenchida, deseja continuar?", "", MessageBoxButtons.OKCancel);
