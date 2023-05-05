@@ -28,80 +28,103 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            tbox_login = new TextBox();
+            btnLogin = new Button();
+            txtUsuario = new TextBox();
             label1 = new Label();
             label2 = new Label();
-            tbox_senha = new TextBox();
+            txtSenha = new TextBox();
+            groupBox1 = new GroupBox();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
-            // button1
+            // btnLogin
             // 
-            button1.BackColor = Color.Transparent;
-            button1.ForeColor = Color.Black;
-            button1.Location = new Point(107, 246);
-            button1.Name = "button1";
-            button1.Size = new Size(111, 45);
-            button1.TabIndex = 0;
-            button1.Text = "Confirmar";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += button1_Click;
+            btnLogin.BackColor = Color.Transparent;
+            btnLogin.ForeColor = Color.Black;
+            btnLogin.Location = new Point(138, 223);
+            btnLogin.Margin = new Padding(2);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(128, 36);
+            btnLogin.TabIndex = 0;
+            btnLogin.Text = "Login";
+            btnLogin.UseVisualStyleBackColor = false;
+            btnLogin.Click += button1_Click;
             // 
-            // tbox_login
+            // txtUsuario
             // 
-            tbox_login.Location = new Point(91, 22);
-            tbox_login.Name = "tbox_login";
-            tbox_login.Size = new Size(150, 31);
-            tbox_login.TabIndex = 1;
+            txtUsuario.Location = new Point(123, 42);
+            txtUsuario.Margin = new Padding(2);
+            txtUsuario.Name = "txtUsuario";
+            txtUsuario.Size = new Size(141, 27);
+            txtUsuario.TabIndex = 1;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(25, 27);
+            label1.Location = new Point(49, 42);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(60, 25);
+            label1.Size = new Size(62, 20);
             label1.TabIndex = 2;
-            label1.Text = "Login:";
+            label1.Text = "Usuário:";
+            label1.Click += label1_Click;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(25, 84);
+            label2.Location = new Point(49, 98);
+            label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(64, 25);
+            label2.Size = new Size(52, 20);
             label2.TabIndex = 4;
             label2.Text = "Senha:";
             // 
-            // tbox_senha
+            // txtSenha
             // 
-            tbox_senha.Location = new Point(91, 79);
-            tbox_senha.Name = "tbox_senha";
-            tbox_senha.PasswordChar = '*';
-            tbox_senha.Size = new Size(150, 31);
-            tbox_senha.TabIndex = 3;
+            txtSenha.Location = new Point(123, 98);
+            txtSenha.Margin = new Padding(2);
+            txtSenha.Name = "txtSenha";
+            txtSenha.PasswordChar = '*';
+            txtSenha.Size = new Size(141, 27);
+            txtSenha.TabIndex = 3;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(txtUsuario);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(txtSenha);
+            groupBox1.Location = new Point(2, 28);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(317, 177);
+            groupBox1.TabIndex = 5;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Tela de Login";
+            groupBox1.Enter += groupBox1_Enter;
             // 
             // Login
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(333, 315);
-            Controls.Add(label2);
-            Controls.Add(tbox_senha);
-            Controls.Add(label1);
-            Controls.Add(tbox_login);
-            Controls.Add(button1);
+            ClientSize = new Size(331, 281);
+            Controls.Add(groupBox1);
+            Controls.Add(btnLogin);
+            Margin = new Padding(2);
             Name = "Login";
             Text = "Login";
+            Load += Login_Load;
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private Button button1;
-        private TextBox tbox_login;
+        private Button btnLogin;
+        private TextBox txtUsuario;
         private Label label1;
         private Label label2;
-        private TextBox tbox_senha;
+        private TextBox txtSenha;
+        private GroupBox groupBox1;
     }
 }
