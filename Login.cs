@@ -15,36 +15,47 @@ namespace FolhaPagamento
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //Criando conexão com o BD
-            string strConexao = "server=127.0.0.1;uid=root;pwd=Samuel13@;database=folhadepagamento";
-            MySqlConnection conexao = new MySqlConnection(strConexao);
-            var comand = conexao.CreateCommand();
-            MySqlCommand query = new MySqlCommand("select count(*) from tbFuncionario where cpf = '" + txtUsuario.Text + "'   and Senha = '" + txtSenha.Text + "'", conexao);
-            conexao.Open();
-            DataTable dataTable = new DataTable();
-            MySqlDataAdapter da = new MySqlDataAdapter(query);
-            da.Fill(dataTable);
-
-            foreach (DataRow list in dataTable.Rows)
+            if (txtSenha.Text != "" && txtUsuario.Text != "")
             {
-                if (Convert.ToInt32(list.ItemArray[0]) > 0)
+                //Criando conexão com o BD
+                string strConexao = "server=127.0.0.1;uid=root;pwd=Samuel13@;database=folhadepagamento";
+                MySqlConnection conexao = new MySqlConnection(strConexao);
+                var comand = conexao.CreateCommand();
+                MySqlCommand query = new MySqlCommand("select count(*) from tbFuncionario where cpf = '" + txtUsuario.Text + "'   and Senha = '" + txtSenha.Text + "'", conexao);
+                conexao.Open();
+                DataTable dataTable = new DataTable();
+                MySqlDataAdapter da = new MySqlDataAdapter(query);
+                da.Fill(dataTable);
+
+                foreach (DataRow list in dataTable.Rows)
                 {
-                    MessageBox.Show("Usuário validado", "Validação", MessageBoxButtons.OK,MessageBoxIcon.Information);
+                    if (Convert.ToInt32(list.ItemArray[0]) > 0)
+                    {
+                        MessageBox.Show("Usuário validado", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    Menu menu = new Menu();
-                   
-                    this.Hide();
+                        Menu menu = new Menu();
+
+                        this.Hide();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Usuário Inválido", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("Usuário Inválido", "Validação",MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-            }
-            conexao.Close();
+                conexao.Close();
 
-
-            
         }
+            else
+            {
+                MessageBox.Show("Preencha os campos. ","", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                txtUsuario.Focus();
+            }
+
+
+
+
+
+}
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {

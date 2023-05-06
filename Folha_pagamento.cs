@@ -125,5 +125,10 @@ namespace FolhaPagamento
         {
             MessageBox.Show("É obrigatótio o preenchimento do campo.");
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

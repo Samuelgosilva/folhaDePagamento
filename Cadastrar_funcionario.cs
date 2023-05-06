@@ -628,5 +628,9 @@ namespace FolhaPagamento
             btn_excluir.Enabled = false;
         }
 
+        private void lbox_funcionarios_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
